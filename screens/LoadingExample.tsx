@@ -71,7 +71,7 @@ const HSeparator = styled.View`
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
-const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
+const LoadingExample: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [nowPlaying, setNowPlaying] = useState([]);
@@ -177,4 +177,4 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
   );
 };
 
-export default Movies;
+export default LoadingExample;

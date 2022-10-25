@@ -9,10 +9,13 @@ import Root from "./navigation/Root";
 import { StatusBar } from "expo-status-bar";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, lightTheme } from "./theme";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 SplashScreen.preventAutoHideAsync();
 
 const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
+
+const queryClient = new QueryClient();
 
 const loadImages = (images) =>
   images.map((image) => {
@@ -58,12 +61,14 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-      <NavigationContainer>
-        <StatusBar style={isDark ? "light" : "dark"} />
-        <View onLayout={onLayoutRootView}></View>
-        <Root />
-      </NavigationContainer>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <NavigationContainer>
+          <StatusBar style={isDark ? "light" : "dark"} />
+          <View onLayout={onLayoutRootView}></View>
+          <Root />
+        </NavigationContainer>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

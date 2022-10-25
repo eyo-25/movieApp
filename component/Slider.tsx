@@ -62,7 +62,10 @@ const Slide: React.FC<SlideProps> = ({
         <Wrapper>
           <Poster path={posterPath} />
           <Column>
-            <Title isDark={isDark}>{originalTitle}</Title>
+            <Title isDark={isDark}>
+              {originalTitle.slice(0, 20)}
+              {originalTitle.length > 20 ? "..." : null}
+            </Title>
             {voteAverage > 0 ? (
               <Votes isDark={isDark}>⭐️ {voteAverage}/10</Votes>
             ) : null}

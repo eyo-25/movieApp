@@ -1,5 +1,6 @@
 {
   "expo": {
+    "userInterfaceStyle": "automatic",
     "name": "movieProject",
     "slug": "movieProject",
     "version": "1.0.0",
