@@ -17,6 +17,8 @@ const Tabs = () => {
         backgroundColor: isDark ? BLACK_COLOR : "white",
       }}
       screenOptions={{
+        // 언마운트시 컴포넌트를 지운다. 다만 리액트 쿼리 사용하지 않으면 캐싱하지않아서 다시 fetch한다.
+        unmountOnBlur: true,
         tabBarStyle: {
           backgroundColor: isDark ? BLACK_COLOR : "white",
         },
