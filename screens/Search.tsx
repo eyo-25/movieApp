@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import { View, Text } from "react-native";
 import { useQuery } from "react-query";
 import { moviesApi, tvApi } from "../api";
 import Loader from "../component/Loder";
@@ -35,8 +34,6 @@ const Search = () => {
     //enabled로 mount시 실행을 막고 refetch를 통하여 필요할때 fetch
     enabled: false,
   });
-
-  console.log(moviesLoading, tvLoading);
 
   const onSubmit = () => {
     if (query === "") return;

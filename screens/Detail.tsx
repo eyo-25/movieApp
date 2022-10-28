@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { View, Text, TouchableOpacity, Share, Platform } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Movie, moviesApi, TV, tvApi } from "../api";
+import { Movie, MovieDetails, moviesApi, TV, tvApi, TVDetails } from "../api";
 import { Dimensions, StyleSheet, Linking } from "react-native";
 import Poster from "../component/Poster";
 import { makeImgPath } from "../utils";
@@ -11,7 +11,6 @@ import { BLACK_COLOR } from "../colors";
 import { useQuery } from "react-query";
 import Loader from "../component/Loder";
 import { Ionicons } from "@expo/vector-icons";
-import * as WebBrowser from "expo-web-browser";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -76,24 +75,32 @@ const Detail: React.FC<DetailScreenProps> = ({
   route: { params },
 }) => {
   const isMovie = "original_title" in params;
+  const { isLoading, data } = useQuery<MovieDetails | TVDetails>(
+    [isMovie ? "movies" : "tvs", params.id],
+    isMovie ? moviesApi.detail : tvApi.detail
+  );
   const shareMedia = async () => {
-    const isAndroid = Platform.OS === "android";
-    const homepage =
-      isMovie && "imdb_id" in params
-        ? `https://www.imdb.com/title/${data.imdb_id}/`
-        : data.homepage;
-    const title =
-      "original_title" in params ? params.original_title : params.original_name;
-    if (isAndroid) {
-      await Share.share({
-        message: `${title}\n티져 보러가기: ${homepage}`,
-        title: title,
-      });
-    } else {
-      await Share.share({
-        url: homepage,
-        title: title,
-      });
+    if (data) {
+      const isAndroid = Platform.OS === "android";
+      const homepage =
+        isMovie && "imdb_id" in data
+          ? `https://www.imdb.com/title/${data.imdb_id}/`
+          : data.homepage;
+      const title =
+        "original_title" in params
+          ? params.original_title
+          : params.original_name;
+      if (isAndroid) {
+        await Share.share({
+          message: `${title}\n티져 보러가기: ${homepage}`,
+          title: title,
+        });
+      } else {
+        await Share.share({
+          url: homepage,
+          title: title,
+        });
+      }
     }
   };
   const SheareButton = () => {
@@ -103,10 +110,6 @@ const Detail: React.FC<DetailScreenProps> = ({
       </TouchableOpacity>
     );
   };
-  const { isLoading, data } = useQuery(
-    [isMovie ? "movies" : "tvs", params.id],
-    isMovie ? moviesApi.detail : tvApi.detail
-  );
 
   console.log(params.id);
 
@@ -154,7 +157,7 @@ const Detail: React.FC<DetailScreenProps> = ({
         <Overview>{params.overview}</Overview>
         {isLoading ? <Loader /> : null}
         {data?.videos?.results?.map((video) => (
-          <VideoBtn key={video.id} onPress={() => openYTLink(video.key)}>
+          <VideoBtn key={video.key} onPress={() => openYTLink(video.key)}>
             <Ionicons name="logo-youtube" color="white" size={24} />
             <BtnText>{video.name}</BtnText>
           </VideoBtn>
